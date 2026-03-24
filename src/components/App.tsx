@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Box, Text } from 'ink';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { Box, Text, useInput } from 'ink';
 import Spinner from 'ink-spinner';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
@@ -30,6 +30,23 @@ export function App({ reposDir }: Props) {
   const [toDelete, setToDelete] = useState<CleanItem[]>([]);
   const [deletionProgress, setDeletionProgress] = useState<DeletionProgress>({ index: 0, total: 0, currentRel: '' });
   const [deleted, setDeleted] = useState<DeletedItem[]>([]);
+  const [keyHint, setKeyHint] = useState('');
+  const hintTimer = useRef<NodeJS.Timeout | null>(null);
+
+  useInput((input, key) => {
+    let label = '';
+    if (key.upArrow) label = '↑';
+    else if (key.downArrow) label = '↓';
+    else if (key.escape) label = 'Esc';
+    else if (key.return) label = 'Enter';
+    else if (input === ' ') label = 'Space';
+    else if (input && !key.ctrl && !key.meta) label = input;
+    if (label) {
+      setKeyHint(label);
+      if (hintTimer.current) clearTimeout(hintTimer.current);
+      hintTimer.current = setTimeout(() => setKeyHint(''), 1500);
+    }
+  });
 
   useEffect(() => {
     scan(
@@ -117,52 +134,60 @@ export function App({ reposDir }: Props) {
     process.exit(0);
   }, []);
 
-  if (view === 'loading') {
-    const walkingDir = scanPhase.phase === 'walking' ? scanPhase.currentDir : undefined;
-    return (
-      <Box flexDirection="column" paddingX={2} paddingY={1}>
-        <Box>
-          <Text color="cyan"><Spinner type="dots" /></Text>
-          <Text>  Walking {reposDir ?? '~/Repos'}…</Text>
-        </Box>
-        {walkingDir && (
-          <Box paddingLeft={4}>
-            <Text dimColor>{walkingDir}</Text>
+  function renderView() {
+    if (view === 'loading') {
+      const walkingDir = scanPhase.phase === 'walking' ? scanPhase.currentDir : undefined;
+      return (
+        <Box flexDirection="column" paddingX={2} paddingY={1}>
+          <Box>
+            <Text color="cyan"><Spinner type="dots" /></Text>
+            <Text>  Walking {reposDir ?? '~/Repos'}…</Text>
           </Box>
-        )}
-      </Box>
-    );
-  }
-
-  if (view === 'deleting') {
-    return <DeletingView {...deletionProgress} />;
-  }
-
-  if (view === 'confirm') {
-    const selected = items.filter(i => i.selected);
+          {walkingDir && (
+            <Box paddingLeft={4}>
+              <Text dimColor>{walkingDir}</Text>
+            </Box>
+          )}
+        </Box>
+      );
+    }
+    if (view === 'deleting') return <DeletingView {...deletionProgress} />;
+    if (view === 'confirm') {
+      const selected = items.filter(i => i.selected);
+      return (
+        <ConfirmView
+          selected={selected}
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+          onQuit={handleQuit}
+        />
+      );
+    }
+    if (view === 'summary') {
+      return <SummaryView deleted={deleted} onReturn={handleCancel} onQuit={handleQuit} />;
+    }
     return (
-      <ConfirmView
-        selected={selected}
-        onConfirm={handleConfirm}
-        onCancel={handleCancel}
+      <ListView
+        items={items}
+        scanPhase={scanPhase}
+        onToggle={handleToggle}
+        onSelectAll={handleSelectAll}
+        onDeselectAll={handleDeselectAll}
+        onDelete={handleDelete}
         onQuit={handleQuit}
       />
     );
   }
 
-  if (view === 'summary') {
-    return <SummaryView deleted={deleted} onReturn={handleCancel} onQuit={handleQuit} />;
-  }
-
   return (
-    <ListView
-      items={items}
-      scanPhase={scanPhase}
-      onToggle={handleToggle}
-      onSelectAll={handleSelectAll}
-      onDeselectAll={handleDeselectAll}
-      onDelete={handleDelete}
-      onQuit={handleQuit}
-    />
+    <Box flexDirection="column">
+      {renderView()}
+      <Box justifyContent="flex-end" paddingRight={2}>
+        {keyHint
+          ? <><Text dimColor>key </Text><Text color="black" backgroundColor="cyan" bold>{` ${keyHint} `}</Text></>
+          : <Text> </Text>
+        }
+      </Box>
+    </Box>
   );
 }
