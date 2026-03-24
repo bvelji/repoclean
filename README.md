@@ -2,7 +2,7 @@
 
 An interactive terminal UI for reclaiming disk space between development sessions. Scans your repos directory for regenerable build artifacts and dependency directories, lets you select what to remove, and shows you exactly what will be deleted before anything is touched.
 
-![CleanupTUI screenshot placeholder](https://via.placeholder.com/800x400?text=CleanupTUI)
+![repoclean TUI](assets/screenshot.gif)
 
 ## What it scans
 

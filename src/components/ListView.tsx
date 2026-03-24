@@ -65,7 +65,7 @@ export function ListView({ items, scanPhase, onToggle, onSelectAll, onDeselectAl
   }, [filtered.length, cursor]);
 
   // Visible window: reserve 6 rows for header + footer
-  const listHeight = Math.max(termHeight - 6, 5);
+  const listHeight = Math.max(termHeight - 7, 5);
   const scrollOffset = Math.max(0, cursor - Math.floor(listHeight / 2));
   const visible = filtered.slice(scrollOffset, scrollOffset + listHeight);
 
