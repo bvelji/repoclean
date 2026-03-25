@@ -1,6 +1,6 @@
 {
   "name": "@bvelji/repoclean",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "TUI for cleaning up dev artifacts across your repos",
   "license": "MIT",
   "repository": {
