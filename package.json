@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "TUI for cleaning up dev artifacts across your repos",
   "type": "module",
+  "bin": { "repoclean": "./dist/index.js" },
+  "files": ["dist/"],
   "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
     "start": "tsx src/index.tsx"
   },
   "dependencies": {
