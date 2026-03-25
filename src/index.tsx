@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import path from 'path';
 import { render } from 'ink';
 import { App } from './components/App.js';
