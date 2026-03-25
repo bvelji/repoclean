@@ -3,6 +3,10 @@
   "version": "1.0.2",
   "description": "TUI for cleaning up dev artifacts across your repos",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bvelji/repoclean"
+  },
   "type": "module",
   "bin": {
     "repoclean": "./dist/index.js"
