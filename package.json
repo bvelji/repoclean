@@ -1,5 +1,5 @@
 {
-  "name": "repoclean",
+  "name": "@bvelji/repoclean",
   "version": "1.0.0",
   "description": "TUI for cleaning up dev artifacts across your repos",
   "type": "module",
