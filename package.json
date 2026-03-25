@@ -8,6 +8,7 @@
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
+    "release": "bash scripts/release.sh",
     "start": "tsx src/index.tsx"
   },
   "dependencies": {
