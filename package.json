@@ -2,6 +2,7 @@
   "name": "@bvelji/repoclean",
   "version": "1.0.1",
   "description": "TUI for cleaning up dev artifacts across your repos",
+  "license": "MIT",
   "type": "module",
   "bin": {
     "repoclean": "./dist/index.js"
