@@ -1,10 +1,14 @@
 {
   "name": "@bvelji/repoclean",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "TUI for cleaning up dev artifacts across your repos",
   "type": "module",
-  "bin": { "repoclean": "./dist/index.js" },
-  "files": ["dist/"],
+  "bin": {
+    "repoclean": "./dist/index.js"
+  },
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
