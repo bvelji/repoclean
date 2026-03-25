@@ -13,6 +13,7 @@ interface Props {
   onQuit: () => void;
 }
 
+
 export function SummaryView({ deleted, onReturn, onQuit }: Props) {
   useInput((input) => {
     if (input === 'r') onReturn();
